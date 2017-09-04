@@ -2,7 +2,7 @@ const assert = require('assert')
 const request = require('request-promise')
 const Crawler = require('crawler')
 const fs = require('fs')
-var Promise = require('bluebird')
+const { blue, green, red } = require('../log')
 const { JSDOM } = require('jsdom')
 
 const _parseOptions = (opts) => {
@@ -67,6 +67,8 @@ const _parseLinesData = html => {
 
 const fetchLines = (opts = {}) => {
 
+  blue('Fetching lines of Leopoldense');
+
   let names = []
   request('http://www.leopoldense.com.br')
   .then(res => {
@@ -108,12 +110,11 @@ const fetchLines = (opts = {}) => {
     })
   })
   .then((linesJson) => {
-    const writeFile = Promise.promisify(fs.writeFile)
-    console.log('write file : ./leopoldense-json.json');
+    const writeFile = require('bluebird').promisify(fs.writeFile)
+    green('write file : ./leopoldense-json.json');
     return writeFile('./leopoldense-json.json', JSON.stringify(linesJson), 'utf-8')
     .then(() => linesJson)
   })
-  .then(console.info)
   .catch(console.error)
 
 };

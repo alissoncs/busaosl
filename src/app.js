@@ -1,5 +1,7 @@
-var Promise = require('bluebird')
 const leopoldensefetchLines = require('./leopoldense/fetchLines')
-const leopoldensefetchLines = require('./sinoscap/fetchLines')
+const sinoscapfetchLines = require('./sinoscap/fetchLines')
+const feitoriaFetchLines = require('./feitoria/fetchLines')
 
-leopoldensefetchLines()
+// leopoldensefetchLines()
+//sinoscapfetchLines()
+feitoriaFetchLines()
