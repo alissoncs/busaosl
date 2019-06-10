@@ -1,9 +1,13 @@
 const assert = require('assert')
 const request = require('request-promise')
 const Crawler = require('crawler')
+const urlJoin = require('url-join');
 const fs = require('fs')
-const { blue, green, red } = require('../log')
+const { blue, green, red } = require('./log')
 const { JSDOM } = require('jsdom')
+
+
+const baseUrl = 'https://www.viacaofeitoria.com.br';
 
 const _parseOptions = (opts) => {
     let lines = []
@@ -67,10 +71,10 @@ const _parseLinesData = html => {
 
 const fetchLines = (opts = {}) => {
 
-  blue('Fetching lines of Leopoldense');
+  blue('Fetching lines of Feitoria');
 
   let names = []
-  request('http://www.leopoldense.com.br')
+  request(baseUrl)
   .then(res => {
     const dom = new JSDOM(res)
     const doc = dom.window.document
@@ -81,15 +85,18 @@ const fetchLines = (opts = {}) => {
     return lines
   })
   .then(lines => {
-    console.log(lines);
     const reqs = lines.map((item) => {
       console.log('prepared request to', item.url);
+      let url = item.url.trim();
+      if (url.indexOf('http') === -1) {
+        url = urlJoin(baseUrl, url);
+      }
       return request({
-        url: item.url.trim(),
-        uri: item.url.trim()
+        url,
+        uri: url,
       })
       .then(res => {
-        console.log('finished request to', item.url)
+        console.log('finished request to', url)
         return res
       })
     })
@@ -111,8 +118,8 @@ const fetchLines = (opts = {}) => {
   })
   .then((linesJson) => {
     const writeFile = require('bluebird').promisify(fs.writeFile)
-    green('write file : ./leopoldense-json.json');
-    return writeFile('./leopoldense-json.json', JSON.stringify(linesJson), 'utf-8')
+    green('write file : ./output/feitoria-json.json');
+    return writeFile('./output/feitoria-json.json', JSON.stringify(linesJson), 'utf-8')
     .then(() => linesJson)
   })
   .catch(console.error)

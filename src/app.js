@@ -1,7 +1,15 @@
-const leopoldensefetchLines = require('./leopoldense/fetchLines')
-const sinoscapfetchLines = require('./sinoscap/fetchLines')
-const feitoriaFetchLines = require('./feitoria/fetchLines')
+const Promise = require('bluebird');
+global.Promise = Promise;
 
-// leopoldensefetchLines()
-//sinoscapfetchLines()
-feitoriaFetchLines()
+const leopoldense = require('./fetchLeopoldense')
+const feitoria = require('./fetchFeitoria')
+
+Promise.all([
+    leopoldense(),
+    feitoria(),
+]).then((results) => {
+    console.info('Finished');
+}).catch((err) => {
+    console.error(err);
+});
+
