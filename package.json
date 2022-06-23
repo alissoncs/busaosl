@@ -10,7 +10,7 @@
     "casperjs": "^1.1.4",
     "chalk": "^2.1.0",
     "crawler": "^1.0.5",
-    "jsdom": "^11.2.0",
+    "jsdom": "^16.5.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "url-join": "^4.0.0"
